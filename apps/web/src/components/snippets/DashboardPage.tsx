@@ -37,11 +37,11 @@ export function DashboardPage() {
   const folderParam = new URLSearchParams(location.search).get('folder') ?? undefined
 
   const load = useCallback(() => {
-    fetchSnippets({
-      q:        debouncedSearch || undefined,
-      language: lang !== 'all' ? lang : undefined,
-      folder:   folderParam,
-    })
+    const params: Parameters<typeof fetchSnippets>[0] = {}
+    if (debouncedSearch) params.q = debouncedSearch
+    if (lang !== 'all')  params.language = lang
+    if (folderParam)     params.folder = folderParam
+    fetchSnippets(params)
   }, [debouncedSearch, lang, folderParam, fetchSnippets])
 
   useEffect(() => { load() }, [load])
