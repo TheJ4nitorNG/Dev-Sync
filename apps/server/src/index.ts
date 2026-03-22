@@ -7,7 +7,7 @@ import type {
   ClientToServerEvents,
   ServerToClientEvents,
   SocketData,
-} from '../lib/types.js'
+} from './lib/types.js'
 
 import { authRouter } from './routes/auth.js'
 import { snippetsRouter } from './routes/snippets.js'
