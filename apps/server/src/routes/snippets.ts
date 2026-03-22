@@ -139,10 +139,10 @@ snippetsRouter.patch('/:id', async (req: AuthRequest, res, next) => {
         ...rest,
         // folderId can be explicitly set to null to remove from folder
         ...(folderId !== undefined ? { folderId: folderId ?? null } : {}),
-        ...(tagIds !== undefined ? {
+        ...(Array.isArray(tagIds) ? {
           tags: {
             deleteMany: {},
-            create: tagIds.map((tagId) => ({ tagId })),
+            create: (tagIds as string[]).map((tagId: string) => ({ tagId })),
           },
         } : {}),
       },
@@ -216,4 +216,3 @@ snippetsRouter.delete('/:id/collaborators/:collabUserId', async (req: AuthReques
     res.json({ ok: true, data: null })
   } catch (err) { next(err) }
 })
- 
