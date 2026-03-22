@@ -82,7 +82,8 @@ export function useSocketSync({
   useEffect(() => {
     if (!token || !snippetId) return
 
-    const socket: AppSocket = io({ auth: { token }, transports: ['websocket'] })
+    const socketUrl = import.meta.env['VITE_API_URL'] ?? ''
+    const socket: AppSocket = io(socketUrl, { auth: { token }, transports: ['websocket'] })
     socketRef.current = socket
 
     const yText = ydoc.getText('content')
