@@ -2,9 +2,9 @@ import { Router } from 'express'
 import { z } from 'zod'
 import { prisma } from '../lib/prisma.js'
 import type { AuthRequest } from '../middleware/authenticate.js'
-
+ 
 export const foldersRouter = Router()
-
+ 
 foldersRouter.get('/', async (req: AuthRequest, res, next) => {
   try {
     const folders = await prisma.folder.findMany({
@@ -14,7 +14,7 @@ foldersRouter.get('/', async (req: AuthRequest, res, next) => {
     res.json({ ok: true, data: folders })
   } catch (err) { next(err) }
 })
-
+ 
 foldersRouter.post('/', async (req: AuthRequest, res, next) => {
   try {
     const { name } = z.object({ name: z.string().min(1).max(60) }).parse(req.body)
@@ -24,11 +24,14 @@ foldersRouter.post('/', async (req: AuthRequest, res, next) => {
     res.status(201).json({ ok: true, data: folder })
   } catch (err) { next(err) }
 })
-
+ 
 foldersRouter.delete('/:id', async (req: AuthRequest, res, next) => {
   try {
+    const folderId = req.params['id']
+    if (!folderId) { res.status(400).json({ ok: false, error: 'Missing id' }); return }
+ 
     await prisma.folder.deleteMany({
-      where: { id: req.params['id'], userId: req.user!.userId },
+      where: { id: folderId, userId: req.user!.userId },
     })
     res.json({ ok: true, data: null })
   } catch (err) { next(err) }
