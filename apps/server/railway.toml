@@ -1,0 +1,11 @@
+[build]
+builder = "nixpacks"
+
+[build.nixpacks]
+buildCommand = "npm install && npx prisma generate --schema=./prisma/schema.prisma && npx tsc -p ./tsconfig.json"
+
+[deploy]
+startCommand = "npx prisma migrate deploy --schema=./prisma/schema.prisma && node dist/index.js"
+healthcheckPath = "/health"
+healthcheckTimeout = 60
+restartPolicyType = "on_failure"

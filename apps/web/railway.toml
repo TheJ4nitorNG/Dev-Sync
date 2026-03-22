@@ -1,0 +1,11 @@
+[build]
+builder = "nixpacks"
+
+[build.nixpacks]
+buildCommand = "npm install && npx vite build"
+
+[deploy]
+startCommand = "npx vite preview --host 0.0.0.0 --port ${PORT:-3000}"
+healthcheckPath = "/"
+healthcheckTimeout = 30
+restartPolicyType = "on_failure"
