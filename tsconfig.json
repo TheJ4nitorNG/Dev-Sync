@@ -3,9 +3,11 @@
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "lib": ["ES2022"],
+    "lib": [
+      "ES2022"
+    ],
     "strict": true,
-    "exactOptionalPropertyTypes": true,
+    "exactOptionalPropertyTypes": false,
     "noUncheckedIndexedAccess": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
