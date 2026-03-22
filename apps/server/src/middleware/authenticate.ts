@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
-import type { UserSession } from '@dev-sync/types'
+import type { UserSession } from '../lib/types.js'
 
 export interface AuthRequest extends Request {
   user?: UserSession
