@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String        @id @default(cuid())
+  email        String        @unique
+  passwordHash String
+  avatarUrl    String?
+  createdAt    DateTime      @default(now())
+
+  snippets      Snippet[]
+  collaborations Collaborator[]
+  folders       Folder[]
+}
+
+model Snippet {
+  id        String   @id @default(cuid())
+  title     String
+  content   String   @db.Text
+  language  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  owner    User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId  String
+
+  folder   Folder? @relation(fields: [folderId], references: [id])
+  folderId String?
+
+  tags           TagsOnSnippets[]
+  collaborators  Collaborator[]
+
+  @@index([ownerId])
+  @@index([language])
+}
+
+model Tag {
+  id       String           @id @default(cuid())
+  name     String           @unique
+  color    String           @default("#4fffb0")
+  snippets TagsOnSnippets[]
+}
+
+model TagsOnSnippets {
+  snippet   Snippet @relation(fields: [snippetId], references: [id], onDelete: Cascade)
+  snippetId String
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId     String
+
+  @@id([snippetId, tagId])
+}
+
+model Collaborator {
+  snippet   Snippet @relation(fields: [snippetId], references: [id], onDelete: Cascade)
+  snippetId String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  role      String  @default("Viewer") // "Editor" | "Viewer"
+
+  @@id([snippetId, userId])
+  @@index([userId])
+}
+
+model Folder {
+  id     String    @id @default(cuid())
+  name   String
+  user   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  snippets Snippet[]
+
+  @@unique([userId, name])
+}
