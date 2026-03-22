@@ -5,10 +5,25 @@
     "rootDir": "./src",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
+    "composite": true,
+    "exactOptionalPropertyTypes": false,
+    "noUncheckedIndexedAccess": false,
     "paths": {
-      "@dev-sync/types": ["../../packages/types/src/index.ts"]
+      "@dev-sync/types": [
+        "../../packages/types/src/index.ts"
+      ]
     }
   },
-  "include": ["src/**/*"],
-  "exclude": ["dist", "node_modules"]
+  "include": [
+    "src/**/*"
+  ],
+  "references": [
+    {
+      "path": "../../packages/types"
+    }
+  ],
+  "exclude": [
+    "dist",
+    "node_modules"
+  ]
 }
